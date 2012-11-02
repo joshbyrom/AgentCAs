@@ -10,6 +10,7 @@ var Agent = function(group) {
 	}
 	
 	this.is_same_group = function(other) {
+    if(other === null || other === undefined) return false;
 		return this.group.name === other.group.name;
 	};
 	

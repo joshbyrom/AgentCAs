@@ -67,7 +67,7 @@ var GroupLogic = function(cellspace, groups) {
 	this.cellspace = cellspace;
 	this.groups = groups;
 	
-	this.birth_chance = 0.65;
+	this.birth_chance = 0.55;
   
   this.initial_range = 5;   
   this.extended_range = 10;
@@ -154,7 +154,8 @@ var GroupLogic = function(cellspace, groups) {
         if(i === cell.column && j === cell.row) continue;
         
         current_cell = neighbors[i][j];
-        if(current_cell.get_state() === 'empty' && current_cell.next_state !== 'occupied') {
+        if(current_cell.get_state() === 'empty' && 
+           current_cell.next_state !== 'occupied') {
           current_value = this.get_cell_value(cell, current_cell);
 
           if(current_value > highest.value) {
@@ -179,14 +180,18 @@ var GroupLogic = function(cellspace, groups) {
 };
 
 var main = function(canvas_id) {
-	var Yy = new Group('Yy', 'yellow');
-	var YY = new Group('YY', 'green');
-  var Xy = new Group('Xy', 'red');
+	var Yy = new Group('Yy', 'purple');
+	var YY = new Group('YY', 'teal');
+  var Xy = new Group('Xy', 'green');
+  var XX = new Group('XX', 'blue');
 	
-	var cellspace = new Cellspace(50, 50);
+  XX.set_attitude_towards(YY, 0.5);
+  YY.set_attitude_towards(XX, 0.5);
+  
+	var cellspace = new Cellspace(100, 100);
 	
 	var view = new View(cellspace, canvas_id);
-	var logic = new GroupLogic(cellspace, [Yy, YY, Xy]);
+	var logic = new GroupLogic(cellspace, [Yy, YY, Xy, XX]);
 	
 	var sim = new Simulation(logic, view);
 	//sim.infinite = true;

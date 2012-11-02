@@ -7,7 +7,7 @@ var shuffle = function(array) {
 		index = Math.floor(Math.random() * count--);
 		temp = array[count];
 		array[count] = array[index];
-		array[index] = array[count];
+		array[index] = temp;
 	}
 }
 
@@ -67,7 +67,10 @@ var GroupLogic = function(cellspace, groups) {
 	this.cellspace = cellspace;
 	this.groups = groups;
 	
-	this.birth_chance = 0.05;
+	this.birth_chance = 0.65;
+  
+  this.initial_range = 5;   
+  this.extended_range = 10;
 	
 	// update
 	this.update = function() {
@@ -103,8 +106,71 @@ var GroupLogic = function(cellspace, groups) {
 				cell.next_state = 'empty';
 				cell.agent = null;
 			}
-	    }
+	  } else if(state === 'occupied') {
+      this.determine_move(cell, this.initial_range);
+    }
 	};
+  
+  this.move_cell = function(cell, target) {
+    var tmp = target.agent;
+    
+    target.next_state = cell.get_state();
+    target.agent = cell.agent;
+    
+    cell.next_state = target.state;
+    cell.agent = tmp;
+  }
+  
+  this.get_cell_value = function(cell_one, cell_two) {
+    var attitude = 0;
+    
+    var neighbors = cell_two.get_neighbors(this.initial_range);
+    
+    var cell = null;
+    for(var i = 0; i < neighbors.length; ++i) {
+      for(var j = 0; j < neighbors[i].length; ++j) {
+        cell = neighbors[i][j];
+        
+        if(cell !== cell_one) {
+          attitude += cell_one.agent.get_attitude_towards_agent(cell.agent);
+        }
+      }
+    }
+    
+    return attitude;
+  };
+  
+  this.determine_move = function(cell, range) {
+    var neighbors = cell.get_neighbors(range);
+    var highest = {
+      target : cell,
+      value : this.get_cell_value(cell, cell)
+    };
+    
+    var current_value = 0;
+    var current_cell = null;
+    for(var i = 0; i < neighbors.length; ++i) {
+      for(var j = 0; j < neighbors[i].length; ++j) {
+        if(i === cell.column && j === cell.row) continue;
+        
+        current_cell = neighbors[i][j];
+        if(current_cell.get_state() === 'empty' && current_cell.next_state !== 'occupied') {
+          current_value = this.get_cell_value(cell, current_cell);
+
+          if(current_value > highest.value) {
+            highest.target = neighbors[i][j];
+            highest.value = current_value;
+          }
+        }
+      }
+    }
+    
+    if(highest.target !== cell) {
+      this.move_cell(cell, highest.target);
+    } else if(range < this.extended_range) {
+      this.determine_move(cell, this.extended_range);
+    }
+  };
 	
 	this.create_agent = function() {
 		var index = Math.floor(Math.random() * this.groups.length);
@@ -115,13 +181,15 @@ var GroupLogic = function(cellspace, groups) {
 var main = function(canvas_id) {
 	var Yy = new Group('Yy', 'yellow');
 	var YY = new Group('YY', 'green');
+  var Xy = new Group('Xy', 'red');
 	
 	var cellspace = new Cellspace(50, 50);
 	
 	var view = new View(cellspace, canvas_id);
-	var logic = new GroupLogic(cellspace, [Yy, YY]);
+	var logic = new GroupLogic(cellspace, [Yy, YY, Xy]);
 	
 	var sim = new Simulation(logic, view);
 	//sim.infinite = true;
-	sim.start(1000, 5);
-}
+	sim.start(1000, 25);
+};
+

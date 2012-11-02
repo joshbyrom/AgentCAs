@@ -8,7 +8,7 @@ var Group = function(name, color) {
 	this.attitudes = {};
 	
 	this.get_attitude_towards = function(other) {
-		if(other.name === this.name) return this.selt_attitude;
+		if(other.name === this.name) return this.self_attitude;
 
 		var result = this.attitudes[other.name];
 		if(result === undefined) return this.base_attitude;

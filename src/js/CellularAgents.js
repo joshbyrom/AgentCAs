@@ -119,7 +119,7 @@ var GroupLogic = function(cellspace, groups) {
     
     cell.next_state = target.state;
     cell.agent = tmp;
-  }
+  };
   
   this.get_cell_value = function(cell_one, cell_two) {
     var attitude = 0;

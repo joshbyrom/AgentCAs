@@ -7,7 +7,7 @@ var Agent = function(group) {
 	
 	this.get_group_name = function() {
 		return this.group.name;
-	}
+	};
 	
 	this.is_same_group = function(other) {
             if(other === null || other === undefined) return false;

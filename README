@@ -1,1 +1,23 @@
-More information coming soon...
+Cellular Segregation and Attraction
+---------------------
+
+A rule based movement simulation inspired initially by the YY and Yy chromosomes in peas (yup), but as it developed I realized it would be very easy to include the principles of attraction as well.
+
+Agents
+---------------------
+
+Agents belong to specific groups and act as cell occupiers within the cellspace. The logic class is responsible for dictating how the agents behave. In the provided example, agents have either a negative or positive attitude towards agents of different groups. They have a very positive attitude of their own group, and move towards other agents that belong to their own group; and away from agents in groups where their attitude is less than positive.
+
+
+Groups
+---------------------
+
+The group objects hold the different attitude scores that agents belonging to the group will have towards other groups. By default groups have a negative attitude towards other groups, but can be easily modified to feel attraction or neutrality towards other groups.
+
+
+Notes
+---------------------
+
+Using code I had developed for the FireCA simulation (hosted here on github), this simulation was easier to write than I expected, and can be used to create some interesting patterns.
+
+If you would like to see the code running, you can view it at http://joshbyrom.com/CA/Agents/

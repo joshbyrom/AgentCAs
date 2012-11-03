@@ -69,8 +69,8 @@ var GroupLogic = function(cellspace, groups) {
 	
 	this.birth_chance = 0.55;
   
-  this.initial_range = 5;   
-  this.extended_range = 10;
+        this.initial_range = 5;   
+        this.extended_range = 10;
 	
 	// update
 	this.update = function() {
